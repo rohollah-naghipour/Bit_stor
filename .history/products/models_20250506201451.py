@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Category(models.Model):
-    parent = models.ForeignKey('self', verbose_name=('parent'), blank=True, null=True, on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', verbose_name=_('parent'), blank=True, null=True, on_delete=models.CASCADE)
     title = models.CharField(('title'), max_length=50)
     description = models.TextField(('description'), blank=True)
     avatar = models.ImageField(('avatar'), blank=True, upload_to='categories/')
