@@ -1,4 +1,4 @@
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidatorm
 
 
 class PhoneNumberValidator(RegexValidator):
