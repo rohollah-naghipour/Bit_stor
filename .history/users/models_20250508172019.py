@@ -4,30 +4,40 @@ from django.core import validators
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin, BaseUserManager, send_mail
 
+
 class UserManager(BaseUserManager):
-    def create_user(self, username, email=None, phone_number=None, password=None, **extra_fields):
+    use_in_migrations = True
+
+    def _create_user(self, username, phone_number, email, password, is_staff, is_superuser, **extra_fields):
+        now = timezone.now()
         if not username:
-            raise ValueError('The Username must be set')
-        
-        email = self.normalize_email(email) if email else None
-        user = self.model(
-            username=username,
-            email=email,
-            phone_number=phone_number,
-            **extra_fields
-        )
-        user.set_password(password)
-        user.save()
+            raise ValueError('The given username must be set')
+        email = self.normalize_email(email)
+        user = self.model(phone_number=phone_number,
+                          username=username, email=email,
+                          is_staff=is_staff, is_active=True,
+                          is_superuser=is_superuser,
+                          date_joined=now, **extra_fields)
+
+        if not extra_fields.get('no_password'):
+            user.set_password(password)
+
+        user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email=None, phone_number=None, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
+    def create_user(self, username=None, phone_number=None, email=None, password=None, **extra_fields):
+        if username is None:
+            if email:
+                username = email.split('@', 1)[0]
+            if phone_number:
+                username = random.choice('abcdefghijklmnopqrstuvwxyz') + str(phone_number)[-7:]
+            while User.objects.filter(username=username).exists():
+                username += str(random.randint(10, 99))
 
-        return self.create_user(username, email, phone_number, password, **extra_fields)
+        return self._create_user(username, phone_number, email, password, False, False, **extra_fields)
 
-
+    def create_superuser(self, username, email, password, **extra_fields):
+        return self.create_user(username, email, password, True, True, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(('username'), max_length=32, unique=True,
@@ -46,7 +56,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(('first name'), max_length=30, blank=True)
     last_name = models.CharField(('last name'), max_length=30, blank=True)
     email = models.EmailField(('email address'), unique=True, null=True, blank=True)
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    phone_number = models.BigIntegerField(('mobile number'), unique=True, null=True, blank=True,
+                                          validators=[
+                                              validators.RegexValidator(r'^989[0-3,9]\d{8}$',
+                                                                        ('Enter a valid mobile number.'), 'invalid'),
+                                          ],
+                                          error_messages={
+                                              'unique': ("A user with this mobile number already exists."),
+                                          }
+                                          )
     is_staff = models.BooleanField(('staff status'), default=False,
                                    help_text=('Designates whether the user can log into this admin site.'))
     is_active = models.BooleanField(('active'), default=True,
@@ -57,10 +75,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-  
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
-    
+    REQUIRED_FIELDS = ['email', 'phone_number']
+
     class Meta:
         db_table = 'users'
         verbose_name = ('user')
