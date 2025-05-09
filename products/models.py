@@ -41,10 +41,12 @@ class File(models.Model):
     FILE_AUDIO = 1
     FILE_VIDEO = 2
     FILE_PDF = 3
+    FILE_IMAGE = 4
     FILE_TYPES = (
         (FILE_AUDIO, ('audio')),
         (FILE_VIDEO, ('video')),
-        (FILE_PDF, ('pdf'))
+        (FILE_PDF, ('pdf')),
+        (FILE_IMAGE, ('image'))
     )
 
     product = models.ForeignKey('Product', verbose_name=('product'), related_name='files', on_delete=models.CASCADE)

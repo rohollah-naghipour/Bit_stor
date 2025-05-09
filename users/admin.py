@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
-from .models import User, Province
+from .models import User, Province, UserProfile
 
 
 
@@ -36,8 +36,13 @@ class MyUserAdmin(UserAdmin):
         return queryset, may_have_duplicates
 
 
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ['nick_name', 'avatar', 'gender', 'birthday','province']
+
+
+
 
 admin.site.unregister(Group)
 admin.site.register(Province)
 admin.site.register(User, MyUserAdmin)
-# admin.site.register(Site)
+admin.site.register(UserProfile, UserProfileAdmin)
