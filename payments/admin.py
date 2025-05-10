@@ -6,6 +6,8 @@ from .models import Gateway, Payment
 @admin.register(Gateway)
 class GatewayAdmin(admin.ModelAdmin):
     list_display = ['title', 'is_enable']
+    list_filter = ['title']
+  
 
 
 @admin.register(Payment)
