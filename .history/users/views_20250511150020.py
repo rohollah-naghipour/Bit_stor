@@ -22,7 +22,10 @@ class RegisterView(APIView):
         if not phone_number and not username:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
-      
+        user1 = User.objects.get(phone_number = phone_number)
+        print(user1)
+        print(user1.username)
+
         try:
             user = User.objects.get(username=username 
                                     ,phone_number=phone_number

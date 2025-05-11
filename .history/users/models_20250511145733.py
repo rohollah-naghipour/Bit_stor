@@ -8,8 +8,8 @@ from django.contrib.auth.models import (AbstractBaseUser,PermissionsMixin,
 class UserManager(BaseUserManager):
     def create_user(self, username, email=None,
                      phone_number=None,**extra_fields):
-        if not username:
-            raise ValueError('The Username must be set')
+        #if not username:
+            #raise ValueError('The Username must be set')
 
         email = self.normalize_email(email) if email else None
         user = self.model(username=username,

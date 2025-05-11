@@ -13,27 +13,22 @@ from .models import User, Device
 class RegisterView(APIView):
  
     def post(self, request):
+        print(request.user)
 
         phone_number = request.data.get('phone_number')
         username = request.data.get('username')
         email = request.data.get('email')
-         
 
         if not phone_number and not username:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        
-      
+
         try:
             user = User.objects.get(username=username 
                                     ,phone_number=phone_number
                                     ,email=email)
-            
-
 
         except User.DoesNotExist:
-            user = User.objects.create_user(username= username,
-                                             phone_number=phone_number,
-                                             email=email)
+            user = User.objects.create_user(phone_number=phone_number)
 
 
         device = Device.objects.create(user=user)
@@ -58,6 +53,7 @@ class GetTokenView(APIView):
 
         try:
             user = User.objects.get(phone_number=phone_number)
+            print(user.phone_number)
             cached_code = cache.get(str(phone_number))
 
             print(cached_code)

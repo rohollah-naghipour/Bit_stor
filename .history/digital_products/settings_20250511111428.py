@@ -108,6 +108,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Authorization
 AUTH_USER_MODEL = 'users.User'
 
+# send code
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = belljonh5gmail.com
+EMAIL_HOST_PASSWORD = '2001Roh1002'
+EMAIL_USE_TLS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
