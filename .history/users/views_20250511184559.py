@@ -18,17 +18,11 @@ class SendOTPView(APIView):
 
         if serializer.is_valid():
             phone_number = serializer.validated_data['phone_number']
-            try:
-                is_user_exists = User.objects.filter(phone_number=phone_number).exists()
-                if is_user_exists:
-                    otp_code = str(random.randint(10000, 999999))
-                     # send message (sms or email) ==> otp_code
-                    cache.set(str(phone_number), otp_code, timeout = 2 * 60) 
-                return Response({'code OTP': otp_code}, 
-                                status=status.HTTP_200_OK)
-            except:
-                return Response({'message': 'Not registered yet'}, 
-                                status= status.HTTP_403_FORBIDDEN)    
+
+            otp_code = str(random.randint(10000, 999999))
+            cache.set(str(phone_number), otp_code, timeout = 2 * 60) 
+
+            return Response({'code OTP': otp_code}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -42,7 +36,7 @@ class VerifyOTPView(APIView):
 
             cached_otp = cache.get(phone_number)
             if cached_otp and cached_otp == otp_code:
-                cache.delete(phone_number)
+                cache.delete(cache_key)
                 return Response({'message': 'OTP verified successfully.'}, status=status.HTTP_200_OK)
             else:
                 return Response({'error': 'Invalid OTP.'}, status=status.HTTP_400_BAD_REQUEST)

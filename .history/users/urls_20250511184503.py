@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from .views import SendOTPView, VerifyOTPView
+from .views import SendOTPView
 
 
 urlpatterns = [
