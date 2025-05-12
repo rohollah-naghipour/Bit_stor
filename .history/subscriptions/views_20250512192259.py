@@ -5,10 +5,11 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
-from subscriptions.models import Package, Subscription
+from subscriptions.models import Package
 from subscriptions.serializers import PackageSerializer
 
-from django.utils import timezone
+import uuid
+import random
 
 
 
@@ -16,7 +17,7 @@ class PackageView(APIView):
 
     def get(self, request):
         try: 
-            packages = Package.objects.filter(is_enable =True)
+            packages = Package.objects.all()
             serializer = PackageSerializer(packages, many=True)
             if serializer.is_valid:
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -26,9 +27,3 @@ class PackageView(APIView):
         
 
 
-#class SubscriptionView(APIView):
-    #def get(self, request):
-        #try:
-            #subscription = Subscription.objects.filter(
-                #user = request.user,expire_time = timezone.now)
-    

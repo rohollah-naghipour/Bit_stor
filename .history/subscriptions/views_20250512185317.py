@@ -5,30 +5,24 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
-from subscriptions.models import Package, Subscription
+from subscriptions.models import package, subscriptions
 from subscriptions.serializers import PackageSerializer
 
-from django.utils import timezone
+import uuid
+import random
 
 
 
 class PackageView(APIView):
-
     def get(self, request):
         try: 
-            packages = Package.objects.filter(is_enable =True)
+            packages = package.objects.get(is_enable = True)
             serializer = PackageSerializer(packages, many=True)
             if serializer.is_valid:
                 return Response(serializer.data, status=status.HTTP_200_OK)
-        except Package.DoesNotExist:
+        except package.DoesNotExist:
             return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
+                             status=status.HTTP_400_BAD_REQUEST)
         
 
 
-#class SubscriptionView(APIView):
-    #def get(self, request):
-        #try:
-            #subscription = Subscription.objects.filter(
-                #user = request.user,expire_time = timezone.now)
-    

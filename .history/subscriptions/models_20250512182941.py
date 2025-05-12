@@ -5,8 +5,7 @@ from users.models import User
 
 class Package(models.Model):
     title = models.CharField(('title'), max_length=50)
-    sku = models.CharField(('stock keeping unit'),
-                            max_length=20, db_index=True)
+    sku = models.CharField(('stock keeping unit'), max_length=20, db_index=True)
     description = models.TextField(('description'), blank=True)
     avatar = models.ImageField(('avatar'), blank=True, upload_to='packages/')
     is_enable = models.BooleanField(('is enable'), default=True)
@@ -25,10 +24,8 @@ class Package(models.Model):
 
 
 class Subscription(models.Model):
-    user = models.ForeignKey('users.User', related_name='%(class)s',
-                              on_delete=models.CASCADE)
-    package = models.ForeignKey(Package, related_name='%(class)s',
-                                 on_delete=models.CASCADE)
+    user = models.ForeignKey('users.User', related_name='%(class)s', on_delete=models.CASCADE)
+    package = models.ForeignKey(Package, related_name='%(class)s', on_delete=models.CASCADE)
     created_time = models.DateTimeField(('created time'), auto_now_add=True)
     expire_time = models.DateTimeField(('expire time'), blank=True, null=True)
 
