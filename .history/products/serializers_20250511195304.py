@@ -9,11 +9,11 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ('parent','title', 'description', 'avatar')
         
 
-class ProductSerializer(serializers.HyperlinkedModelSerializer):
-    categories = CategorySerializer(many=True)
+class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ('id', 'title', 'description', 'avatar', 'categories', 'url')
+        fields = ('title', 'description', 'avatar')
+       
 
 
 class FileSerializer(serializers.ModelSerializer):

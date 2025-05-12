@@ -43,7 +43,8 @@ class ProductDetailView(APIView):
         except Product.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        serializer = ProductSerializer(product,context={'request': request}) 
+        serializer = ProductSerializer(product,
+                                       context={'request': request}) 
                                        
         return Response(serializer.data)
 
@@ -60,9 +61,9 @@ class FileDetailView(APIView):
 
     def get(self, request, product_id, pk):
         try:
-            file = File.objects.get(pk=pk, product_id=product_id)
+            f = File.objects.get(pk=pk, product_id=product_id)
         except File.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = FileSerializer(file, context={'request': request})
+        serializer = FileSerializer(f, context={'request': request})
         return Response(serializer.data)
 

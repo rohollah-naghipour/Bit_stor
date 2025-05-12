@@ -23,7 +23,7 @@ class FileSerializer(serializers.ModelSerializer):
         model = File
         fields = ('id', 'title', 'file', 'file_type')
 
-    def get_file_type(self, obj):
-        return obj.get_file_type_display()
+    #def get_file_type(self, obj):
+        #return obj.get_file_type_display()
 
 
