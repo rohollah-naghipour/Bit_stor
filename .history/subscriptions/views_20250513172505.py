@@ -25,13 +25,13 @@ class PackageView(APIView):
         
 
 
-#class SubscriptionView(APIView):
-    #def get(self, request):
-        #try:
-            #subscription = Subscription.objects.filter(
-                #user = request.user,expire_time = timezone.now)
+class SubscriptionView(APIView):
+    def get(self, request):
+        try:
+            subscription = Subscription.objects.filter(
+                user = request.user,expire_time = timezone.now)
             
-        #except subscription.DoesNotExist:
-            #return Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)    
+        except subscription.DoesNotExist:
+            return Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)    
 
     

@@ -15,7 +15,7 @@ from django.utils import timezone
 class PackageView(APIView):
     def get(self, request):
         try: 
-            packages = Package.objects.filter(is_enable = True)
+            packages = Package.objects.get(is_enable = True)
             serializer = PackageSerializer(packages, many=True)
             if serializer.is_valid:
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -30,8 +30,4 @@ class PackageView(APIView):
         #try:
             #subscription = Subscription.objects.filter(
                 #user = request.user,expire_time = timezone.now)
-            
-        #except subscription.DoesNotExist:
-            #return Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)    
-
     

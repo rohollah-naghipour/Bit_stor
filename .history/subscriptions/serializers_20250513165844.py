@@ -7,6 +7,6 @@ from subscriptions.models import Package, Subscription
 class PackageSerializer(serializers.ModelSerializer):
     
     class Meta:
-        model = Package
+        ,model = Package
         fields = ('title', 'description', 'avatar', 'price', 'duration')
 
