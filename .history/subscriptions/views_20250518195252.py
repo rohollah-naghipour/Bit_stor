@@ -3,10 +3,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework import IsAuthenticated
+
 
 from subscriptions.models import Package, Subscription
-from subscriptions.serializers import PackageSerializer, SubscriptionSerializer
+from subscriptions.serializers import PackageSerializer
 
 from django.utils import timezone
 
