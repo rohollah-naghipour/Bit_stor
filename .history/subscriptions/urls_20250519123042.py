@@ -1,5 +1,5 @@
 from django.urls import path
-from subscriptions.views import PackageView, SubscriptionView 
+from subscriptions.views import PackageView
 
 
 
